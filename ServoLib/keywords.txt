@@ -1,0 +1,12 @@
+ServoLib	KEYWORD1
+setEasingFunc	KEYWORD2
+setTiming	KEYWORD2
+begin	KEYWORD2
+readServo	KEYWORD2
+write	KEYWORD2
+interrupt_checkNewPos  KEYWORD2
+update  KEYWORD2
+easing  KEYWORD2
+servoEaseInOut  KEYWORD2
+servoEaseOut  KEYWORD2
+servoNoEase  KEYWORD2
