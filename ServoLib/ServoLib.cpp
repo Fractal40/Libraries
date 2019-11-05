@@ -25,6 +25,7 @@ void ServoLib::begin(int _startingPos)
 	}
 	sweepTime = 1000;
 	updateFreq = 20;
+	tickCount = sweepTime/updateFreq;
 	startPos = _startingPos*1000;
 	endPos = _startingPos*1000;
 	currPos = _startingPos*1000;
@@ -43,15 +44,29 @@ void ServoLib::easing()
 	currPos = servoEaseInOut();
 } else if (easingMethod == "easeOut") {
 	currPos = servoEaseOut();
+} else if (easingMethod == "noEasing") {
+	currPos = servoNoEase();
 } else {
 	currPos = servoNoEase();
-}
+} //end else if
+
 }
 
 void ServoLib::setTiming(int _sweepTime, int _updateFreq)
 {
 	sweepTime = _sweepTime;
 	updateFreq = _updateFreq;
+	tickCount = sweepTime/updateFreq;
+}
+
+void ServoLib::setStepParabola(int _paraAmp)
+{
+	paraAmp = _paraAmp;
+	if (paraAmp > 0) {
+		parabola = true;
+	} else {
+		parabola = false;
+	}
 }
 
 int ServoLib::readServo()
@@ -67,7 +82,6 @@ void ServoLib::write(int _servoTarget)
 		return;
 	}
 	interrupt_checkNewPos(_servoTarget);
-	tickCount = sweepTime/updateFreq;
 	update();
 }
 
@@ -81,19 +95,20 @@ void ServoLib::update()
 
 
 
-    if (endPos != startPos) {
+    if (endPos != startPos || parabola == true) {
       arrived = false;
     } else {
       arrived = true;
-
+			parabola = false;
     }
 
 		easing();
 
     if( arrived == false) {
       tick++;
-      //if (tick == 1) determineTime = millis();
-      pwm.setPWM(SERVO_INDEX, 0, int(currPos/1000));
+      if (tick == 1) determineTime = millis();
+			addStepParabola();
+			pwm.setPWM(SERVO_INDEX, 0, int(currPos/1000));
       //debugEaser();
     }
 
@@ -102,7 +117,8 @@ void ServoLib::update()
     if( tick == tickCount ) {
       arrived = true;
       tick = 0;
-      //Serial.print(millis()-determineTime+20); Serial.println(" ms");
+			parabola = false;
+      Serial.print(millis()-determineTime+20); Serial.println(" ms");
     } else {
       arrived = false;
 
@@ -113,6 +129,15 @@ void ServoLib::update()
     }
 
 
+}
+
+
+void arc()
+{
+	//setTiming half
+	//write 2 times
+	//first write = highest point of arc - easeOut
+	//second write = lowest point of arc - easeinOut
 }
 
 long ServoLib::servoEaseInOut()
@@ -146,6 +171,11 @@ long ServoLib::servoNoEase()
   t /= sweepTime/1.0;
 
   return c*t + startPos;
+}
+
+void ServoLib::addStepParabola()
+{
+	currPos += -1*paraAmp*pow(tick,2)+paraAmp*tickCount*(tick);
 }
 
 void ServoLib::interrupt_checkNewPos(int _servoTarget)
