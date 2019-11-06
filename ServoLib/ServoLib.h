@@ -15,12 +15,12 @@ class ServoLib
 		ServoLib(int _SERVO_INDEX, int _SERVO_MIN, int _SERVO_MAX );
 		void setEasingFunc(String _easingMethod);
 		void setTiming(int _sweepTime, int _updateFreq);
-		void setStepParabola(int _paraAmp);
+		void addArc(int _arcAmp);
 		void begin(int _startingPos);
-		int readServo();
+		int read();
 		void write(int _servoTarget);
 		void debugEaser();
-		void arc();
+		int err(int errCode, int errVal);
 
 	private:
 		//external libraries
@@ -34,8 +34,8 @@ class ServoLib
 		long servoEaseOut();
 		long servoNoEase();
 		String easingMethod; //either easeInOut, easeOut, no
-		void addStepParabola();
-		int paraAmp = 0;
+		void arcEq();
+		int arcAmp = 0;
 		//timing variables
 		unsigned long prevUpdate;
 		int sweepTime, updateFreq;
@@ -48,7 +48,7 @@ class ServoLib
 		//flags
 		boolean arrived;
 		boolean begun = false;
-		boolean parabola = false;
+		boolean arc = false;
 
 		//servo constants
 		int SERVO_INDEX;
