@@ -105,7 +105,7 @@ void ServoLib::update()
 
     if( arrived == false) {
       tick++;
-      if (tick == 1) determineTime = millis();
+      //if (tick == 1) determineTime = millis();
 			arcEq();
 			constrain(currPos/1000, SERVO_MIN, SERVO_MAX);
 			pwm.setPWM(SERVO_INDEX, 0, int(currPos/1000));
@@ -118,7 +118,7 @@ void ServoLib::update()
       arrived = true;
       tick = 0;
 			arc = false;
-      Serial.print(millis()-determineTime+20); Serial.println(" ms");
+      //Serial.print(millis()-determineTime+20); Serial.println(" ms");
     } else {
       arrived = false;
 
@@ -193,7 +193,7 @@ void ServoLib::debugEaser() {
 
 }
 
-int constrain(int errCode, int errVal)
+int err(int errCode, int errVal)
 {
 
 }
