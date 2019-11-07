@@ -14,12 +14,11 @@ class InverseKinematics
     int getAngleDeg(int _jointNum);
     int getAnglePulse(int _jointNum);
 
-
 	private:
     void degToPulse();
     int limbA_Len, limbB_Len, limbC_Len;
     int joint[3];
-    int x, y, z;
+		int x, y, z;
 
 };
 
