@@ -23,8 +23,10 @@ void ServoLib::begin(int _startingPos)
 			Serial.println("No valid starting value");
 		}
 	}
+	//default values
 	sweepTime = 1000;
 	updateFreq = 20;
+	tickCount = sweepTime/updateFreq;
 	startPos = _startingPos*1000;
 	endPos = _startingPos*1000;
 	currPos = _startingPos*1000;
@@ -43,18 +45,32 @@ void ServoLib::easing()
 	currPos = servoEaseInOut();
 } else if (easingMethod == "easeOut") {
 	currPos = servoEaseOut();
+} else if (easingMethod == "noEasing") {
+	currPos = servoNoEase();
 } else {
 	currPos = servoNoEase();
-}
+} //end else if
+
 }
 
 void ServoLib::setTiming(int _sweepTime, int _updateFreq)
 {
 	sweepTime = _sweepTime;
 	updateFreq = _updateFreq;
+	tickCount = sweepTime/updateFreq;
 }
 
-int ServoLib::readServo()
+void ServoLib::addArc(int _arcAmp)
+{
+	arcAmp = _arcAmp;
+	if (arcAmp > 0) {
+		arc = true;
+	} else {
+		arc = false;
+	}
+}
+
+int ServoLib::read()
 {
 	return currPos/1000;
 }
@@ -67,7 +83,6 @@ void ServoLib::write(int _servoTarget)
 		return;
 	}
 	interrupt_checkNewPos(_servoTarget);
-	tickCount = sweepTime/updateFreq;
 	update();
 }
 
@@ -79,13 +94,11 @@ void ServoLib::update()
   }
   prevUpdate = millis();
 
-
-
-    if (endPos != startPos) {
+    if (endPos != startPos) {  //remove arc condition  || arc == true
       arrived = false;
     } else {
       arrived = true;
-
+			arc = false;
     }
 
 		easing();
@@ -93,7 +106,9 @@ void ServoLib::update()
     if( arrived == false) {
       tick++;
       //if (tick == 1) determineTime = millis();
-      pwm.setPWM(SERVO_INDEX, 0, int(currPos/1000));
+			arcEq();
+			constrain(currPos/1000, SERVO_MIN, SERVO_MAX);
+			pwm.setPWM(SERVO_INDEX, 0, int(currPos/1000));
       //debugEaser();
     }
 
@@ -102,6 +117,7 @@ void ServoLib::update()
     if( tick == tickCount ) {
       arrived = true;
       tick = 0;
+			arc = false;
       //Serial.print(millis()-determineTime+20); Serial.println(" ms");
     } else {
       arrived = false;
@@ -148,6 +164,11 @@ long ServoLib::servoNoEase()
   return c*t + startPos;
 }
 
+void ServoLib::arcEq()
+{
+	currPos += -1*arcAmp*pow(tick,2)+arcAmp*tickCount*(tick);
+}
+
 void ServoLib::interrupt_checkNewPos(int _servoTarget)
 {
   if (endPos != _servoTarget*1000) {
@@ -169,5 +190,10 @@ void ServoLib::debugEaser() {
   Serial.print(currPos); Serial.print(" : ");
   Serial.print(endPos); Serial.print(" : ");
   Serial.println();
+
+}
+
+int err(int errCode, int errVal)
+{
 
 }

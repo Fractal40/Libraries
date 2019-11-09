@@ -1,4 +1,5 @@
 
+
 // Library adapted by Lars Sträm from Example State
 //machine reading serial input
 // Author: Nick Gammon
@@ -31,7 +32,7 @@ void SerialStateMachine::processX(const unsigned int value)
   // do something with X
   //Serial.print ("X = ");
   //Serial.print (value);
-  calledValue[0] = value; //X value
+  calledValue[1] = value; //X value
 } // end of processX
 
 void SerialStateMachine::processY(const unsigned int value)
@@ -39,7 +40,7 @@ void SerialStateMachine::processY(const unsigned int value)
   // do something with Y
   //Serial.print ("Y = ");
   //Serial.print (value);
-  calledValue[1] = value; //Y value
+  calledValue[2] = value; //Y value
 } // end of processY
 
 void SerialStateMachine::processS(const unsigned int value)
@@ -47,7 +48,7 @@ void SerialStateMachine::processS(const unsigned int value)
   // do something with S
   //Serial.print ("S = ");
   //Serial.print (value);
-  calledValue[2] = value; //S value
+  calledValue[3] = value; //S value
 } // end of processS
 
 void SerialStateMachine::processP(const unsigned int value)
@@ -55,7 +56,7 @@ void SerialStateMachine::processP(const unsigned int value)
   // do something with P
   //Serial.print ("P = ");
   //Serial.print (value);
-  calledValue[3] = value; //P value
+  calledValue[4] = value; //P value
 } // end of processS
 
 
@@ -63,6 +64,9 @@ void SerialStateMachine::handlePreviousState ()
 {
   switch (state)
   {
+  case GOT_C:
+    calledValue[0] = currentValue;
+    break;
   case GOT_X:
     processX (currentValue);
     break;
@@ -96,6 +100,9 @@ void SerialStateMachine::processIncomingByte (const byte c)
     // set the new state, if we recognize it
     switch (c)
     {
+    case 'C':
+      state = GOT_C;
+      break;
     case 'X':
       state = GOT_X;
       break;
@@ -119,7 +126,7 @@ void SerialStateMachine::processIncomingByte (const byte c)
 void SerialStateMachine::debug()
 {
 
-  for (int i=0;i<4;i++) {
+  for (int i=0;i<5;i++) {
     Serial.print(calledValue[i]);
     Serial.print(" : ");
   }
