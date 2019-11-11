@@ -19,8 +19,11 @@ class ServoLib
 		void begin(int _startingPos);
 		int read();
 		void write(int _servoTarget);
+		void write(int _servoTarget, int _sweepTime);
+		void write(int _servoTarget, int _sweepTime, int _arcAmp);
 		void debugEaser();
-		int err(int errCode, int errVal);
+		int err(int errVal);
+		int isRunning();
 
 	private:
 		//external libraries
@@ -46,7 +49,7 @@ class ServoLib
 		int tick, tickCount;
 
 		//flags
-		boolean arrived;
+		volatile boolean arrived;
 		boolean begun = false;
 		boolean arc = false;
 
