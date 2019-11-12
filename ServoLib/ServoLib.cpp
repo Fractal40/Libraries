@@ -155,7 +155,7 @@ void ServoLib::update()
 long ServoLib::servoEaseInOut()
 {
 
-  float c = ((endPos+arcPos) - (startPos+arcPos));
+  float c = (endPos - (startPos+arcPos));
   float t = (updateFreq/(sweepTime*1.0))*(1.0+tick)*sweepTime;
   t /= sweepTime/2.0;
   if (t < 1) return c/2*t*t*t + (startPos + arcPos);
@@ -167,7 +167,7 @@ long ServoLib::servoEaseInOut()
 long ServoLib::servoEaseOut()
 {
 
-  float c = ((endPos+arcPos) - (startPos+arcPos));
+  float c = (endPos - (startPos+arcPos));
   float t = (updateFreq/(sweepTime*1.0))*(1.0+tick)*sweepTime;
   t /= sweepTime/1.0;
 
@@ -178,7 +178,7 @@ long ServoLib::servoEaseOut()
 long ServoLib::servoNoEase()
 {
 
-  float c = ((endPos+arcPos) - (startPos+arcPos));
+  float c = (endPos - (startPos+arcPos));
   float t = (updateFreq/(sweepTime*1.0))*(1.0+tick)*sweepTime;
   t /= sweepTime/1.0;
 
