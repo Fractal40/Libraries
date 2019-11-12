@@ -225,6 +225,6 @@ int ServoLib::err(int errVal)
 		Serial.print(errVal); Serial.print(": ");
 		Serial.println("target outside accepted interval");
 	}
-		return constrain(errVal, SERVO_MIN, SERVO_MAX);
+		return constrain(errVal, SERVO_MIN, SERVO_MAX); //checks and constrains value to an acceptable one
 
 }
