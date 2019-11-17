@@ -19,8 +19,12 @@ class ServoLib
 		void begin(int _startingPos);
 		int read();
 		void write(int _servoTarget);
+		void write(int _servoTarget, int _sweepTime);
+		void write(int _servoTarget, int _sweepTime, int _arcAmp);
 		void debugEaser();
-		int err(int errCode, int errVal);
+
+		int err(int errVal);
+		int isRunning();
 
 	private:
 		//external libraries
@@ -33,8 +37,9 @@ class ServoLib
 		long servoEaseInOut();
 		long servoEaseOut();
 		long servoNoEase();
-		String easingMethod; //either easeInOut, easeOut, no
-		void arcEq();
+
+		String easingMethod; //either easeInOut, easeOut, noEasing
+		long arcEq();
 		int arcAmp = 0;
 		//timing variables
 		unsigned long prevUpdate;
@@ -46,7 +51,7 @@ class ServoLib
 		int tick, tickCount;
 
 		//flags
-		boolean arrived;
+		volatile boolean arrived;
 		boolean begun = false;
 		boolean arc = false;
 

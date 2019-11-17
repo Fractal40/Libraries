@@ -1,3 +1,4 @@
+
 // Library adapted by Lars Sträm from Example State
 //machine reading serial input
 // Author: Nick Gammon
@@ -21,6 +22,7 @@ class SerialStateMachine
     void processIncomingByte(const byte c);
     int getValue(int callValue);
     void debug();
+    //void delayCom(int _delay);
 
 
   private:
@@ -31,10 +33,10 @@ class SerialStateMachine
     void processP(const unsigned int value);
     void handlePreviousState ();
 
-    typedef enum {  NONE, GOT_X, GOT_Y, GOT_S, GOT_P } states;
+    typedef enum {  NONE, GOT_C, GOT_X, GOT_Y, GOT_S, GOT_P } states;
     states state = NONE;
     int _callValue;
-    int calledValue[4];
+    int calledValue[5];
     unsigned int currentValue;
 
 };
