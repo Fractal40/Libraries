@@ -42,13 +42,13 @@ void ServoLib::setEasingFunc(String _easingMethod)
 void ServoLib::easing()
 {
 	if (easingMethod == "easeInOut") {
-	currPos = servoEaseInOut();
+	currPos = servoEaseInOut() + arcEq();
 } else if (easingMethod == "easeOut") {
-	currPos = servoEaseOut();
+	currPos = servoEaseOut() + arcEq();
 } else if (easingMethod == "noEasing") {
-	currPos = servoNoEase();
+	currPos = servoNoEase() + arcEq();
 } else {
-	currPos = servoNoEase();
+	currPos = servoNoEase() + arcEq();
 } //end else if
 
 }
@@ -77,7 +77,7 @@ int ServoLib::read()
 
 void ServoLib::write(int _servoTarget)
 {
-	err(_servoTarget);
+	_servoTarget = err(_servoTarget);
 	arc = false;
 	interrupt_checkNewPos(_servoTarget);
 	update();
@@ -85,7 +85,7 @@ void ServoLib::write(int _servoTarget)
 
 void ServoLib::write(int _servoTarget, int _sweepTime)
 {
-	err(_servoTarget);
+	_servoTarget = err(_servoTarget);
 	sweepTime = _sweepTime;
 	arc = false;
 	interrupt_checkNewPos(_servoTarget);
@@ -94,9 +94,10 @@ void ServoLib::write(int _servoTarget, int _sweepTime)
 
 void ServoLib::write(int _servoTarget, int _sweepTime, int _arcAmp)
 {
-	err(_servoTarget);
+	_servoTarget = err(_servoTarget);
 	sweepTime = _sweepTime;
 	arcAmp = _arcAmp;
+
 	if (arcAmp > 0) {
 		arc = true;
 	} else {
@@ -114,22 +115,23 @@ void ServoLib::update()
   }
   prevUpdate = millis();
 
-    if (endPos != startPos || arc == true) {  //remove arc condition  || arc == true
+    if (endPos != startPos || arc == true) {
       arrived = false;
     } else {
       arrived = true;
 			arc = false;
     }
 
+		//arcEq();
 		easing();
 
     if( arrived == false) {
       tick++;
       //if (tick == 1) determineTime = millis();
-			arcEq();
-			currPos = (currPos/1000)*1000; //constrain(currPos/1000, SERVO_MIN, SERVO_MAX);
+
+			currPos = (currPos/1000)*1000;
 			pwm.setPWM(SERVO_INDEX, 0, int(currPos/1000));
-      //debugEaser();
+      debugEaser();
     }
 
     //debugEaser();
@@ -139,9 +141,6 @@ void ServoLib::update()
       tick = 0;
 			arc = false;
       //Serial.print(millis()-determineTime+20); Serial.println(" ms");
-    } else {
-      //arrived = false;
-
     }
 
     if (arrived == true) {
@@ -184,9 +183,9 @@ long ServoLib::servoNoEase()
   return c*t + startPos;
 }
 
-void ServoLib::arcEq()
+long ServoLib::arcEq()
 {
-	currPos += -1*arcAmp*pow(tick,2)+arcAmp*tickCount*(tick);
+	return -1*arcAmp*pow(tick+1,2)+arcAmp*tickCount*(tick+1);
 }
 
 void ServoLib::interrupt_checkNewPos(int _servoTarget)
@@ -225,6 +224,6 @@ int ServoLib::err(int errVal)
 		Serial.print(errVal); Serial.print(": ");
 		Serial.println("target outside accepted interval");
 	}
-		return constrain(errVal, SERVO_MIN, SERVO_MAX); //checks and constrains value to an acceptable one
+		return constrain(errVal*1000, SERVO_MIN, SERVO_MAX)/1000; //checks and constrains value to an acceptable one
 
 }

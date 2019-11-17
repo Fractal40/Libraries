@@ -37,7 +37,7 @@ class ServoLib
 		long servoEaseOut();
 		long servoNoEase();
 		String easingMethod; //either easeInOut, easeOut, noEasing
-		void arcEq();
+		long arcEq();
 		int arcAmp = 0;
 		//timing variables
 		unsigned long prevUpdate;
