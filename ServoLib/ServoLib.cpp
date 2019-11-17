@@ -44,11 +44,13 @@ void ServoLib::easing()
 	if (easingMethod == "easeInOut") {
 	currPos = servoEaseInOut() + arcEq();
 } else if (easingMethod == "easeOut") {
+
 	currPos = servoEaseOut() + arcEq();
 } else if (easingMethod == "noEasing") {
 	currPos = servoNoEase() + arcEq();
 } else {
 	currPos = servoNoEase() + arcEq();
+
 } //end else if
 
 }
@@ -58,6 +60,7 @@ void ServoLib::setTiming(int _sweepTime, int _updateFreq)
 	sweepTime = _sweepTime;
 	updateFreq = _updateFreq;
 	tickCount = sweepTime/updateFreq;
+
 }
 
 void ServoLib::addArc(int _arcAmp)
@@ -69,6 +72,7 @@ void ServoLib::addArc(int _arcAmp)
 		arc = false;
 	}
 }
+
 
 int ServoLib::read()
 {
@@ -116,6 +120,7 @@ void ServoLib::update()
   prevUpdate = millis();
 
     if (endPos != startPos || arc == true) {
+
       arrived = false;
     } else {
       arrived = true;
@@ -131,7 +136,8 @@ void ServoLib::update()
 
 			currPos = (currPos/1000)*1000;
 			pwm.setPWM(SERVO_INDEX, 0, int(currPos/1000));
-      debugEaser();
+      //debugEaser();
+
     }
 
     //debugEaser();
@@ -182,6 +188,7 @@ long ServoLib::servoNoEase()
 
   return c*t + startPos;
 }
+
 
 long ServoLib::arcEq()
 {

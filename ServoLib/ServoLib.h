@@ -22,6 +22,7 @@ class ServoLib
 		void write(int _servoTarget, int _sweepTime);
 		void write(int _servoTarget, int _sweepTime, int _arcAmp);
 		void debugEaser();
+
 		int err(int errVal);
 		int isRunning();
 
@@ -36,6 +37,7 @@ class ServoLib
 		long servoEaseInOut();
 		long servoEaseOut();
 		long servoNoEase();
+
 		String easingMethod; //either easeInOut, easeOut, noEasing
 		long arcEq();
 		int arcAmp = 0;

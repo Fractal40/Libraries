@@ -39,8 +39,10 @@ int InverseKinematics::getAngleDeg(int _joint)
 
 int InverseKinematics::getAnglePulse(int _joint)
 {
+
   //If both getAngleDeg and getAnglePulse is to be used, getAnglePulse can only
   //be be used after getAngleDeg.
   joint[_joint] = map(joint[_joint],45,135,175,525); //convert and map degrees to pulsewidth
   return joint[_joint];
 }
+
