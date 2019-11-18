@@ -22,7 +22,7 @@ class ServoLib
 		void write(int _servoTarget, int _sweepTime);
 		void write(int _servoTarget, int _sweepTime, int _arcAmp);
 		void debugEaser();
-
+		
 		int err(int errVal);
 		int isRunning();
 
