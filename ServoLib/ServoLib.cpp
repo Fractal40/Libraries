@@ -30,7 +30,7 @@ void ServoLib::begin(int _startingPos)
 	startPos = _startingPos*1000;
 	endPos = _startingPos*1000;
 	currPos = _startingPos*1000;
-	pwm.setPWM(SERVO_INDEX, 0, endPos/1000); //initial position of servo (usually pulse = 350)
+	pwm.setPWM(SERVO_INDEX, 0, endPos/1000); //initial position of servo (pulse = 350 --> 90; 90; 90 deg)
 
 }
 
