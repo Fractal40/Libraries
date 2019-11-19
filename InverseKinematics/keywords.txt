@@ -2,4 +2,3 @@ InverseKinematics  KEYWORD1
 ik  KEYWORD2
 getAngleDeg  KEYWORD2
 getAnglePulse  KEYWORD2
-degToPulse  KEYWORD2

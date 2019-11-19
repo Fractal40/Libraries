@@ -1,3 +1,16 @@
+//
+// InverseKinematics.h -- Arduino library for calculating inverse kinematics for
+// a 3 DOF crawler leg.
+//
+//
+// Features:
+// - Supports both angles in degrees and pulsewidth (for use with Adafruit_PWMServoDriver
+//
+// 2019, Lars Ström
+//
+//
+
+
 #ifndef InverseKinematics_h
 #define InverseKinematics_h
 

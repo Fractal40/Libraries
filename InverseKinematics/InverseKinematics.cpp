@@ -1,4 +1,5 @@
 
+
 #include "Arduino.h"
 #include "InverseKinematics.h"
 #include <avr/dtostrf.h>
@@ -19,7 +20,12 @@ void InverseKinematics::ik(int _x, int _y, int _z)
   z = _z; //0 + _z;
 
   legLen = sqrt(x*x+z*z);
-  joint[0] = atan2(z,x)*180/3,14;                                                                 //calculate angle 1
+  if (x == 0) {
+    joint[0] = 0;
+  } else {
+    joint[0] = atan2(z,x)*180/3,14;
+  }
+                                                                   //calculate angle 1
   d= sqrt(pow((legLen-limbA_Len),2)+(y*y));
   b1 = atan2((legLen-limbA_Len),(y))*180/3.14;
   b2 = acos((pow(d,2)+pow(limbB_Len,2)-pow(limbC_Len,2))/(2*d*limbB_Len))*180/3.14;
@@ -45,4 +51,3 @@ int InverseKinematics::getAnglePulse(int _joint)
   joint[_joint] = map(joint[_joint],45,135,175,525); //convert and map degrees to pulsewidth
   return joint[_joint];
 }
-
