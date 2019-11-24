@@ -1,0 +1,8 @@
+ServoLib_simple	KEYWORD1
+begin	KEYWORD2
+read	KEYWORD2
+write	KEYWORD2
+interrupt_checkNewPos  KEYWORD2
+update  KEYWORD2
+err  KEYWORD2
+debugEaser  KEYWORD2
