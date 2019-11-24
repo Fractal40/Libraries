@@ -3,6 +3,9 @@ begin	KEYWORD2
 read	KEYWORD2
 write	KEYWORD2
 interrupt_checkNewPos  KEYWORD2
-update  KEYWORD2
+update_sweep  KEYWORD2
+update_simple  KEYWORD2
+getNewpos KEYWORD2
+isRunning KEYWORD2
 err  KEYWORD2
 debugEaser  KEYWORD2
