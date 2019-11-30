@@ -31,9 +31,9 @@ void MotilityLib::setTiming(int _sweepTime, int _updateFreq)
 	tickCount = sweepTime/updateFreq;
 }
 
-int MotilityLib::getPos()
+long MotilityLib::getPos()
 {
-	return currPos/1000;
+	return currPos;
 }
 
 void MotilityLib::send(int _newPos)

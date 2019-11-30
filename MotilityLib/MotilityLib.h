@@ -15,7 +15,7 @@ class MotilityLib
       void easing();
       void send(int _newPos);
       void update();
-      int getPos();
+      long getPos();
       void debugEaser();
 
 

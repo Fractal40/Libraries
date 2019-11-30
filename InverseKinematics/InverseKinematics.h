@@ -23,17 +23,20 @@ class InverseKinematics
 {
 	public:
 		InverseKinematics(int _limbA_Len, int _limbB_Len, int _limbC_Len);
-    void ik(int _x, int _y, int _z);
+    void ik(float _x, float _y, float _z);
     int getAngleDeg(int _jointNum);
     int getAnglePulse(int _jointNum);
 
 	private:
 
-    int limbA_Len, limbB_Len, limbC_Len;
+    float limbA_Len, limbB_Len, limbC_Len;
     int joint[3];
-		int x, y, z;
+		float x, y, z;
 		int startAngle1, startAngle2, startAngle3;
 		String inputMethod;
+
+		const int PULSE_MAP_MAX = 1100; //= 525;
+		const int PULSE_MAP_MIN = 350; //= 175;
 
 
 };

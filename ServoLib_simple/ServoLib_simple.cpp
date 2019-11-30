@@ -1,4 +1,6 @@
 
+//servo library utilizing Adafruits Adafruit_PWMServoDriver Library
+
 #include "Arduino.h"
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
@@ -14,6 +16,9 @@ ServoLib_simple::ServoLib_simple(int _SERVO_INDEX, int _SERVO_MIN, int _SERVO_MA
 
 void ServoLib_simple::begin(int _startingPos)
 {
+	pwm.begin();
+	delay(1000);
+	pwm.setPWMFreq(120);
 
 	if (_startingPos > SERVO_MIN && _startingPos < SERVO_MAX) {
 		begun = true;
