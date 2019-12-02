@@ -42,14 +42,14 @@ void ServoLib::setEasingFunc(String _easingMethod)
 void ServoLib::easing()
 {
 	if (easingMethod == "easeInOut") {
-	currPos = servoEaseInOut() + arcEq();
+	currPos = servoEaseInOut();// + arcEq();
 } else if (easingMethod == "easeOut") {
 
-	currPos = servoEaseOut() + arcEq();
+	currPos = servoEaseOut();// + arcEq();
 } else if (easingMethod == "noEasing") {
-	currPos = servoNoEase() + arcEq();
+	currPos = servoNoEase();// + arcEq();
 } else {
-	currPos = servoNoEase() + arcEq();
+	currPos = servoNoEase();// + arcEq();
 
 } //end else if
 
@@ -100,9 +100,9 @@ void ServoLib::write(int _servoTarget, int _sweepTime, int _arcAmp)
 {
 	_servoTarget = err(_servoTarget);
 	sweepTime = _sweepTime;
-	arcAmp = _arcAmp;
+	arcAmp = _arcAmp*1000;
 
-	if (arcAmp > 0) {
+	if (arcAmp > 0 || arcAmp < 0) {
 		arc = true;
 	} else {
 		arc = false;
@@ -128,13 +128,18 @@ void ServoLib::update()
     }
 
 		//arcEq();
-		easing();
+
+
+
+			easing();
+			if (arc == true) currPos += arcSine();
+
 
     if( arrived == false) {
       tick++;
       //if (tick == 1) determineTime = millis();
 
-			currPos = (currPos/1000)*1000;
+			//currPos = (currPos/1000)*1000;
 			pwm.setPWM(SERVO_INDEX, 0, int(currPos/1000));
       //debugEaser();
 
@@ -189,6 +194,14 @@ long ServoLib::servoNoEase()
   return c*t + startPos;
 }
 
+long ServoLib::arcSine()
+{
+	//magn*sin(t/d*pi)
+	float t = (updateFreq/(sweepTime*1.0))*(tick)*sweepTime;
+  t /= sweepTime/1.0;
+
+	return arcAmp + arcAmp*cos(t*2*3.14-3.14);
+}
 
 long ServoLib::arcEq()
 {
@@ -198,7 +211,7 @@ long ServoLib::arcEq()
 void ServoLib::interrupt_checkNewPos(int _servoTarget)
 {
   if (endPos != _servoTarget*1000) {
-    tick = 0;
+		tick = 0;
     arrived = true;
     startPos = currPos;
     endPos = _servoTarget*1000;
@@ -219,7 +232,13 @@ void ServoLib::debugEaser()
   Serial.println();
 
 }
+void ServoLib::breakStep()
+{
+	tick = 0;
+	arrived = true;
+	startPos = currPos;
 
+}
 int ServoLib::isRunning()
 {
 	return 1-int(arrived);
