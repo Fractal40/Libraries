@@ -16,7 +16,7 @@ class ServoLib
 		void setEasingFunc(String _easingMethod);
 		void setTiming(int _sweepTime, int _updateFreq);
 		void addArc(int _arcAmp);
-		void breakStep();
+		void stop();
 		void begin(int _startingPos);
 		int read();
 		void write(int _servoTarget);

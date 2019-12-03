@@ -232,7 +232,7 @@ void ServoLib::debugEaser()
   Serial.println();
 
 }
-void ServoLib::breakStep()
+void ServoLib::stop()
 {
 	tick = 0;
 	arrived = true;

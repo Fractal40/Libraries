@@ -17,7 +17,7 @@ Serial port;
 
   
 byte[] data = new byte[5]; 
-int servoPWM = 350;
+int servoPWM = 700;
 int serialPort = 5; //COM12
 int ctrlFlag = 0;
 String output = "";
@@ -35,6 +35,8 @@ float rawY;
 float x;
 float y;
 float alpha;
+//int flag = 0;
+boolean ctrl = false;
 
 ControlP5 cp5;
 
@@ -71,8 +73,8 @@ void setup() {
   servoSlider = cp5.addSlider("Servo PWM")
                    .setPosition(55,250)
                    .setSize(100,20)
-                   .setMax(600)
-                   .setValue(350)
+                   .setMax(1400)
+                   .setValue(700)
                    .setScrollSensitivity(0.01)
                    .setDecimalPrecision(0)
                    ;   
@@ -84,7 +86,11 @@ void setup() {
                    .setValue(0)
                    .setPosition(160,250)
                    .setSize(40,20)
-                   ;               
+                   .activateBy(1)
+                   ;         
+                   
+
+                   
    button_reset = cp5.addButton("reset")
                    .setValue(0)
                    .setPosition(160,275)
@@ -95,6 +101,15 @@ void setup() {
                    .setPosition(50,25)
                    .setSize(40,20)
                    ;
+                   
+button_PWM.onRelease(new CallbackListener() { // add the Callback Listener to the button 
+    public void controlEvent(CallbackEvent theEvent) {
+      // specify whatever you want to happen here
+      //println("callback for startBarCode " + variableName);
+      output = 'C' + str(0) + 'X' + str(int(defaultX)) + 'Y' + str(int(defaultY)) + 'S' + outputServo + 'P' + outputPWM; port.write(output);
+    }
+  }
+  );
       // create a toggle and change the default look to a (on/off) switch look
   cp5.addToggle("toggle")
      .setPosition(220,250)
@@ -143,7 +158,7 @@ void draw() {
   strokeWeight(1);
   //line(0,0,200, 0);
   stroke(255);
-  
+ 
   x = s.getArrayValue()[0]-50;
   y = 100-s.getArrayValue()[1]-50;
   rawX = s.getArrayValue()[0];
@@ -172,21 +187,24 @@ void draw() {
   
   popMatrix();
   
-  print(ctrlFlag);
-  print(" : ");
-  print(byte(rawX));
-  print(" : ");
-  print(byte(rawY));
-  print(" : ");
-  print(byte(servoNum));
-  print(" : ");
-  println(int(servoSlider.getValue())); 
-
- 
-    delay(20);
-    output = 'C' + str(ctrlFlag) + 'X' + str(defaultX) + 'Y' + str(defaultY) + 'S' + outputServo + 'P' + outputPWM;
-    port.write(output);
    
+
+    //ctrlFlag=0;
+    if (servoTestFlag == true) {
+      output = 'C' + str(ctrlFlag) + 'X' + str(int(defaultX)) + 'Y' + str(int(defaultY)) + 'S' + outputServo + 'P' + outputPWM;
+      port.write(output);      
+      
+      print(ctrlFlag);
+      print(" : ");
+      print(str(int(defaultX)));
+      print(" : ");
+      print(str(int(defaultY)));
+      print(" : ");
+      print(byte(servoNum));
+      print(" : ");
+      println(int(servoSlider.getValue()));
+
+    }
 }
 
 void servo(int theServoNum) {
@@ -200,10 +218,25 @@ public void send() {
   outputServo = str(servoNum);
   outputPWM = str(servoSlider.getValue());
   //sendFlag = true;
-  print(int(outputServo));
-  println(int(output));
+
   defaultX = int(rawX); //int(s.getArrayValue()[0]);
   defaultY = int(rawY);
+  
+  output = 'C' + str(int(ctrlFlag)) + 'X' + str(int(defaultX)) + 'Y' + str(int(defaultY)) + 'S' + outputServo + 'P' + outputPWM;
+  port.write(output);
+  
+  //print(int(outputServo));
+  //println(int(output));
+  print(ctrlFlag);
+  
+  print(" : ");
+  print(str(int(defaultX)));
+  print(" : ");
+  print(str(int(defaultX)));
+  print(" : ");
+  print(byte(servoNum));
+  print(" : ");
+  println(int(servoSlider.getValue()));
   //port.write(output);
   //output = "";
 }
@@ -235,6 +268,7 @@ public void button_sendXY() {
   //port.write(output);
   //output = "";
 }
+
 
 void toggle(boolean theFlag) {
   if(theFlag==true) {
