@@ -15,3 +15,5 @@ debugEaser  KEYWORD2
 addArc  KEYWORD2
 arcEQ  KEYWORD2
 stop  KEYWORD2
+arcCos  KEYWORD2
+getSweepTime  KEYWORD2

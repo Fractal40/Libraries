@@ -12,8 +12,9 @@ ServoLib::ServoLib(int _SERVO_INDEX, int _SERVO_MIN, int _SERVO_MAX )
 	SERVO_MAX = _SERVO_MAX*1000;
 }
 
-void ServoLib::begin(int _startingPos)
+void ServoLib::begin(int _startingPos, int _PWMFreq)
 {
+
 	if (_startingPos*1000 > SERVO_MIN && _startingPos*1000 < SERVO_MAX) {
 		begun = true;
 	} else {
@@ -23,6 +24,12 @@ void ServoLib::begin(int _startingPos)
 			Serial.println("No valid starting value");
 		}
 	}
+
+	//Adafruit_PWMServoDriver library begin()
+	pwm.begin();
+	delay(1000);
+	pwm.setPWMFreq(_PWMFreq);
+
 	//default values
 	sweepTime = 1000;
 	updateFreq = 20;
@@ -66,7 +73,7 @@ void ServoLib::setTiming(int _sweepTime, int _updateFreq)
 void ServoLib::addArc(int _arcAmp)
 {
 	arcAmp = _arcAmp;
-	if (arcAmp > 0) {
+	if (arcAmp > 0 || arcAmp < 0) {
 		arc = true;
 	} else {
 		arc = false;
@@ -128,29 +135,22 @@ void ServoLib::update()
     }
 
 		//arcEq();
-
-
-
-			easing();
-			if (arc == true) currPos += arcSine();
-
+		easing();
+		if (arc == true) currPos += arcCos();
 
     if( arrived == false) {
       tick++;
-      //if (tick == 1) determineTime = millis();
-
-			//currPos = (currPos/1000)*1000;
+      if (tick == 1) determineTime = millis();
 			pwm.setPWM(SERVO_INDEX, 0, int(currPos/1000));
       //debugEaser();
-
     }
-
     //debugEaser();
 
     if( tick == tickCount ) {
       arrived = true;
       tick = 0;
 			arc = false;
+			determineTime = millis()-determineTime + 20;
       //Serial.print(millis()-determineTime+20); Serial.println(" ms");
     }
 
@@ -194,7 +194,7 @@ long ServoLib::servoNoEase()
   return c*t + startPos;
 }
 
-long ServoLib::arcSine()
+long ServoLib::arcCos()
 {
 	//magn*sin(t/d*pi)
 	float t = (updateFreq/(sweepTime*1.0))*(tick)*sweepTime;
@@ -203,7 +203,7 @@ long ServoLib::arcSine()
 	return arcAmp + arcAmp*cos(t*2*3.14-3.14);
 }
 
-long ServoLib::arcEq()
+long ServoLib::arcEq() //
 {
 	return -1*arcAmp*pow(tick+1,2)+arcAmp*tickCount*(tick+1);
 }
@@ -242,6 +242,11 @@ void ServoLib::stop()
 int ServoLib::isRunning()
 {
 	return 1-int(arrived);
+}
+
+int ServoLib::getSweepTime()
+{
+		return determineTime;
 }
 
 int ServoLib::err(int errVal)

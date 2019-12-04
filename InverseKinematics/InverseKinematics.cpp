@@ -15,19 +15,15 @@ void InverseKinematics::ik(int _x, int _y, int _z)
 {
   float legLen,d,b1,b2;
 
-  x = _x; //limbA_Len + limbB_Len + _x;
-  y = _y; //limbC_Len + _y;
-  z = _z; //0 + _z;
-
-  legLen = sqrt(x*x+z*z);
-  if (x == 0) {
+  legLen = sqrt(_x*_x+_z*_z);
+  if (_x == 0) {
     joint[0] = 0;
   } else {
-    joint[0] = atan2(z,x)*180/3,14;
+    joint[0] = atan2(_z,_x)*180/3.14;                 //calculate angle 1
   }
-                                                                   //calculate angle 1
-  d= sqrt(pow((legLen-limbA_Len),2)+(y*y));
-  b1 = atan2((legLen-limbA_Len),(y))*180/3.14;
+
+  d= sqrt(pow((legLen-limbA_Len),2)+(_y*_y));
+  b1 = atan2((legLen-limbA_Len),(_y))*180/3.14;
   b2 = acos((pow(d,2)+pow(limbB_Len,2)-pow(limbC_Len,2))/(2*d*limbB_Len))*180/3.14;
   joint[1] = (b1+b2)-90;                                                                          //calculate angle 2
   joint[2] = acos((-pow(d,2)+pow(limbC_Len,2)+pow(limbB_Len,2))/(2*limbB_Len*limbC_Len))*180/3.14;    //calculate angle 3
@@ -35,7 +31,6 @@ void InverseKinematics::ik(int _x, int _y, int _z)
   joint[2] = joint[2];       //Adjust for servo orientations
   joint[1] = joint[1]+90;
   joint[0] = joint[0]+90;
-
 }
 
 int InverseKinematics::getAngleDeg(int _joint)
@@ -45,7 +40,6 @@ int InverseKinematics::getAngleDeg(int _joint)
 
 int InverseKinematics::getAnglePulse(int _joint)
 {
-
   //If both getAngleDeg and getAnglePulse is to be used, getAnglePulse can only
   //be be used after getAngleDeg.
   joint[_joint] = map(joint[_joint],45,135,175,525); //convert and map degrees to pulsewidth

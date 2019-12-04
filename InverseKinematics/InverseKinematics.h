@@ -17,8 +17,6 @@
 #include "Arduino.h"
 #include <avr/dtostrf.h>
 
-
-
 class InverseKinematics
 {
 	public:
@@ -26,17 +24,9 @@ class InverseKinematics
     void ik(int _x, int _y, int _z);
     int getAngleDeg(int _jointNum);
     int getAnglePulse(int _jointNum);
-
 	private:
-
     int limbA_Len, limbB_Len, limbC_Len;
     int joint[3];
-		int x, y, z;
-		int startAngle1, startAngle2, startAngle3;
-		String inputMethod;
-
-
 };
-
 
 #endif

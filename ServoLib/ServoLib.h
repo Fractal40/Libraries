@@ -17,13 +17,13 @@ class ServoLib
 		void setTiming(int _sweepTime, int _updateFreq);
 		void addArc(int _arcAmp);
 		void stop();
-		void begin(int _startingPos);
+		void begin(int _startingPos, int _PWMFreq);
 		int read();
 		void write(int _servoTarget);
 		void write(int _servoTarget, int _sweepTime);
 		void write(int _servoTarget, int _sweepTime, int _arcAmp);
 		void debugEaser();
-
+		int getSweepTime();
 		int err(int errVal);
 		int isRunning();
 
@@ -40,13 +40,13 @@ class ServoLib
 		long servoNoEase();
 
 		String easingMethod; //either easeInOut, easeOut, noEasing
-		long arcEq();
-		long arcSine();
+		long arcEq(); //Not used
+		long arcCos();
 		int arcAmp = 0;
 		//timing variables
 		unsigned long prevUpdate;
 		int sweepTime, updateFreq;
-		unsigned int determineTime;
+		unsigned long determineTime;
 
 		//Position variables
 		long startPos, endPos, currPos;
