@@ -1,0 +1,9 @@
+SerialStateMachine  KEYWORD1
+processIncomingByte KEYWORD2
+getValue  KEYWORD2
+debug KEYWORD2
+processX  KEYWORD2
+processY  KEYWORD2
+processS  KEYWORD2
+processP  KEYWORD2
+handlePreviousState KEYWORD2
