@@ -12,7 +12,7 @@ ServoLib_simple::ServoLib_simple(int _SERVO_INDEX, int _SERVO_MIN, int _SERVO_MA
 	SERVO_MAX = _SERVO_MAX;
 }
 
-void ServoLib_simple::begin(int _startingPos)
+void ServoLib_simple::begin(int _startingPos, int _PWMFreq)
 {
 
 	if (_startingPos > SERVO_MIN && _startingPos < SERVO_MAX) {
@@ -24,6 +24,12 @@ void ServoLib_simple::begin(int _startingPos)
 			Serial.println("No valid starting value");
 		}
 	}
+
+	//Adafruit_PWMServoDriver library begin()
+	pwm.begin();
+	delay(1000);
+	pwm.setPWMFreq(_PWMFreq);
+
 	//default values
 	sweepTime = 0;
 	updateFreq = 0;
