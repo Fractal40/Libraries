@@ -161,6 +161,11 @@ int ServoLib_simple::isRunning()
 	return 1-int(arrived);
 }
 
+int ServoLib_simple::read()
+{
+	return currPos/1000;
+}
+
 int ServoLib_simple::err(int errVal)
 {
 	if (errVal < SERVO_MIN || errVal > SERVO_MAX) {
