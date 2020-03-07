@@ -14,7 +14,7 @@ class ServoLib_simple
 	public:
 		ServoLib_simple(int _SERVO_INDEX, int _SERVO_MIN, int _SERVO_MAX );
 
-		void begin(int _startingPos, int _PWMFreq);
+		void begin(int _startingPos, int _PWMFreq); //60 Hz => deg 90 = pulse 350; 120 Hz => deg 90 = pulse 700
 		int read();
 		void write(int _servoTarget);
 		void write(int _servoTarget, int _sweepTime, int _updateFreq);

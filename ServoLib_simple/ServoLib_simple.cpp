@@ -99,7 +99,7 @@ void ServoLib_simple::update_sweep()
     if( arrived == false) {
       tick++;
 
-	      //if (tick == 1) determineTime = millis();
+	    //if (tick == 1) determineTime = millis();
 			currPos = getNewpos();
 			pwm.setPWM(SERVO_INDEX, 0, currPos);
       //debugEaser();
